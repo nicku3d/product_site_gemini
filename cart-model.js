@@ -10,7 +10,7 @@ export const PRODUCTS = Object.freeze({
   bottle: Object.freeze({
     name: 'KANT · flakon 50 ml',
     price: 249,
-    fulfillment: 'Przedsprzedaż · wysyłka od 03.2027 · darmowa dostawa'
+    fulfillment: 'Przedsprzedaż · premiera 21.03.2027, 10:00 · darmowa dostawa'
   })
 });
 

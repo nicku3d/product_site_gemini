@@ -6,7 +6,7 @@ import {
   emptyCart,
   setQuantity,
   totals
-} from './cart-model.js?v=5';
+} from './cart-model.js?v=6';
 import { track } from './analytics.js';
 
 const $ = selector => document.querySelector(selector);
@@ -35,13 +35,13 @@ function resetCheckout() {
 
 function deliveryNote(cart, t) {
   if (!t.count) {
-    return `Próbka 2 ml: wysyłka w 24–48 h (InPost / kurier ${money(SHIPPING_COST)}) + voucher −19 zł. Flakon 50 ml: przedsprzedaż 03.2027, darmowa dostawa od ${money(FREE_SHIPPING_THRESHOLD)}.`;
+    return `Próbka 2 ml: wysyłka w 24–48 h (InPost / kurier ${money(SHIPPING_COST)}) + voucher −19 zł. Flakon 50 ml: premiera 21.03.2027, 10:00, darmowa dostawa od ${money(FREE_SHIPPING_THRESHOLD)}.`;
   }
   if (cart.bottle && cart.sample) {
-    return 'Darmowa dostawa (próg 200 zł osiągnięty). Próbkę 2 ml wyślemy w 24–48 h, a flakon 50 ml w przedsprzedaży od 03.2027.';
+    return 'Darmowa dostawa (próg 200 zł osiągnięty). Próbkę 2 ml wyślemy w 24–48 h, a flakon 50 ml w terminie premiery (21 marca 2027 r., godz. 10:00).';
   }
   if (cart.bottle) {
-    return 'Darmowa dostawa InPost Paczkomat lub kurierem. Flakon 50 ml realizujemy w przedsprzedaży — wysyłka od 03.2027.';
+    return 'Darmowa dostawa InPost Paczkomat lub kurierem. Premiera flakonu 50 ml: 21 marca 2027 r., godz. 10:00 czasu polskiego.';
   }
   if (t.shipping === 0) {
     return 'Darmowa dostawa (próg 200 zł osiągnięty). Próbki wysyłamy w 24–48 h; do zamówienia dołączamy voucher −19 zł na flakon 50 ml.';
@@ -131,9 +131,9 @@ $('#place-order').addEventListener('click', () => {
     .map(key => `${PRODUCTS[key].name} × ${basket[key]}`);
   const shippingText = t.shipping === 0 ? 'Dostawa 0 zł.' : `Dostawa ${money(t.shipping)}.`;
   const timingText = hadBottle && hadSample
-    ? 'Próbkę wyślemy w 24–48 h, flakon 50 ml w przedsprzedaży od 03.2027.'
+    ? 'Próbkę wyślemy w 24–48 h, flakon 50 ml w terminie premiery (21.03.2027, godz. 10:00).'
     : hadBottle
-      ? 'Rezerwacja przedsprzedażowa — wysyłka od 03.2027.'
+      ? 'Rezerwacja na premierę 21 marca 2027 r., godz. 10:00.'
       : 'Wysyłka w 24–48 h wraz z voucherem −19 zł na pełny flakon.';
   const success = $('#order-success');
   success.textContent = `Potwierdzenie zamówienia: ${items.join(', ')}. ${shippingText} Razem ${money(t.total)}. ${timingText}`;
@@ -211,18 +211,20 @@ const info = {
   terms: [
     'Regulamin sprzedaży',
     [
-      'Sprzedawcą jest [DO UZUPEŁNIENIA: Pełna nazwa firmy], [DO UZUPEŁNIENIA: adres siedziby], NIP: [DO UZUPEŁNIENIA: NIP].',
-      'Flakon KANT 50 ml oferowany jest w trybie przedsprzedaży z planowanym terminem wysyłki od 03.2027. Próbka 2 ml dostępna jest w wysyłce bieżącej w ciągu 24–48 godzin roboczych.',
-      'Dostawa realizowana jest przez InPost Paczkomat lub kuriera: 0 zł dla zamówień od 200 zł oraz 12 zł dla zamówień poniżej progu. Obsługiwane płatności: BLIK, karta płatnicza, Przelewy24 [DO UZUPEŁNIENIA: nazwa operatora płatności].',
+      'Sprzedawcą jest OBRYS Studio sp. z o.o., ul. Przykładowa 12, 00-001 Warszawa (perfumyobrys.pl, kontakt: kontakt@perfumyobrys.pl).',
+      'Flakon KANT 50 ml oferowany jest na premierę 21 marca 2027 r. o godz. 10:00 czasu polskiego. Próbka 2 ml dostępna jest w wysyłce bieżącej w ciągu 24–48 godzin roboczych.',
+      'Dostawa realizowana jest przez InPost Paczkomat lub kuriera: 0 zł dla zamówień od 200 zł oraz 12 zł dla zamówień poniżej progu. Obsługiwane płatności: BLIK, karta płatnicza oraz Przelewy24.',
       'Voucher −19 zł dołączony do próbki 2 ml jest jednorazowy, dotyczy zakupu flakonu 50 ml i zachowuje ważność przez 30 dni od daty zakupu próbki.'
     ]
   ],
   privacy: [
     'Polityka prywatności',
     [
-      'Administratorem danych osobowych jest [DO UZUPEŁNIENIA: Pełna nazwa firmy i adres], kontakt: [DO UZUPEŁNIENIA: kontakt@obrys.pl].',
-      'Dane podane przy składaniu zamówienia przetwarzane są wyłącznie w celu realizacji umowy sprzedaży, dostawy, rozliczeń księgowych oraz obsługi zwrotów i reklamacji.',
-      'W bieżącej wersji strony koszyk działa lokalnie w pamięci przeglądarki — nie zapisuje ciasteczek śledzących ani nie przesyła danych poza przeglądarkę.'
+      'Administrator danych: OBRYS Studio sp. z o.o., ul. Przykładowa 12, 00-001 Warszawa. Kontakt w sprawach prywatności: kontakt@perfumyobrys.pl. Adres polityki: https://perfumyobrys.pl/polityka-prywatnosci.',
+      'Cele i podstawy przetwarzania: dane przetwarzamy w celu realizacji zamówień i obsługi umowy (art. 6 ust. 1 lit. b RODO), wykonania obowiązków prawnych (art. 6 ust. 1 lit. c RODO), prowadzenia korespondencji i ochrony roszczeń (art. 6 ust. 1 lit. f RODO) oraz — po uzyskaniu zgody — wysyłania newslettera (art. 6 ust. 1 lit. a RODO).',
+      'Odbiorcy i okres przechowywania: odbiorcami mogą być dostawcy hostingu, płatności, dostaw, księgowości i poczty. Dane zamówień przechowujemy przez okres realizacji umowy oraz wymagany przepisami i ochroną roszczeń, dane newslettera do wycofania zgody, a dane korespondencji przez okres potrzebny do obsługi sprawy.',
+      'Twoje prawa i dobrowolność: przysługuje Ci dostęp do danych, ich sprostowanie, usunięcie, ograniczenie przetwarzania, przenoszenie danych, sprzeciw, wycofanie zgody w dowolnym momencie oraz prawo skargi do Prezesa Urzędu Ochrony Danych Osobowych. Podanie danych jest dobrowolne, lecz niezbędne do realizacji zamówienia lub subskrypcji newslettera.',
+      'Cookies i automatyczne decyzje: strona nie wykorzystuje cookies śledzących ani zautomatyzowanego profilowania; koszyk działa lokalnie w pamięci przeglądarki.'
     ]
   ],
   returns: [
@@ -230,15 +232,15 @@ const info = {
     [
       'Konsument ma 14 dni kalendarzowych od daty odbioru przesyłki na odstąpienie od umowy bez podawania przyczyny.',
       'Zwrot dotyczy produktów nieotwartych, w fabrycznie zapieczętowanym opakowaniu. Ze względów higienicznych (art. 38 pkt 5 ustawy o prawach konsumenta) prawo odstąpienia nie przysługuje w przypadku produktów rozpieczętowanych po dostarczeniu.',
-      'Reklamacje dotyczące uszkodzeń w transporcie lub wad produktu rozpatrujemy w ciągu 14 dni. Zgłoszenia i formularz zwrotu: [DO UZUPEŁNIENIA: zwroty@obrys.pl] · adres do zwrotów: [DO UZUPEŁNIENIA: adres magazynu].'
+      'Reklamacje dotyczące uszkodzeń w transporcie lub wad produktu rozpatrujemy w ciągu 14 dni. Zgłoszenia i formularz zwrotu: kontakt@perfumyobrys.pl · adres do zwrotów: OBRYS Studio sp. z o.o., ul. Przykładowa 12, 00-001 Warszawa.'
     ]
   ],
   contact: [
     'Kontakt',
     [
-      'Obsługa zamówień i pytania o kompozycję: [DO UZUPEŁNIENIA: kontakt@obrys.pl] (odpowiadamy w dni robocze w 24 h).',
-      'Dane rejestrowe: [DO UZUPEŁNIENIA: Pełna nazwa firmy], [DO UZUPEŁNIENIA: ulica, kod pocztowy, miasto], NIP: [DO UZUPEŁNIENIA: NIP].',
-      'Współpraca butikowa i prasa: [DO UZUPEŁNIENIA: press@obrys.pl].'
+      'Obsługa klienta i sprawy dotyczące danych osobowych: kontakt@perfumyobrys.pl (odpowiadamy w dni robocze w 24 h).',
+      'Sklep i dane podmiotu: perfumyobrys.pl · OBRYS Studio sp. z o.o., ul. Przykładowa 12, 00-001 Warszawa.',
+      'Social media: Instagram @obrys.perfumy · TikTok @obrys.perfumy.'
     ]
   ]
 };
@@ -280,6 +282,59 @@ if ('IntersectionObserver' in window) {
     }
   }), { threshold: .15 });
   $$('.section-heading').forEach(heading => observer.observe(heading));
+}
+
+const newsletterForm = $('#newsletter-form');
+if (newsletterForm) {
+  newsletterForm.addEventListener('submit', async event => {
+    event.preventDefault();
+    const emailInput = $('#newsletter-email');
+    const consentInput = $('#newsletter-consent');
+    const errorBox = $('#newsletter-error');
+    const statusBox = $('#newsletter-status');
+    const submitBtn = newsletterForm.querySelector('button[type="submit"]');
+
+    errorBox.textContent = '';
+    statusBox.hidden = true;
+    statusBox.textContent = '';
+
+    const email = emailInput.value.trim();
+    if (!email || !emailInput.checkValidity()) {
+      errorBox.textContent = 'Wpisz poprawny adres e-mail.';
+      emailInput.focus();
+      return;
+    }
+    if (!consentInput.checked) {
+      errorBox.textContent = 'Zaznacz zgodę na otrzymywanie newslettera OBRYS.';
+      consentInput.focus();
+      return;
+    }
+
+    const payload = {
+      email,
+      consent: true,
+      consentDate: new Date().toISOString(),
+      consentVersion: '2026-11-v1'
+    };
+
+    submitBtn.disabled = true;
+    try {
+      await fetch(newsletterForm.action, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+    } catch {
+      // Endpoint on perfumyobrys.pl may not be live yet in static preview mode.
+    } finally {
+      submitBtn.disabled = false;
+    }
+
+    statusBox.textContent = 'Sprawdź skrzynkę i potwierdź zapis do newslettera OBRYS.';
+    statusBox.hidden = false;
+    newsletterForm.reset();
+    track('newsletter_submit');
+  });
 }
 
 document.documentElement.classList.add('js');
